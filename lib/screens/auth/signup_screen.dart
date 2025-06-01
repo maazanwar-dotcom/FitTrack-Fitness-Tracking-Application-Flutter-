@@ -1,6 +1,7 @@
 import 'package:fittrack/screens/auth/login_screen.dart';
 import 'package:fittrack/widgets/custom_form_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -23,25 +24,35 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  void signUp() {
+  Future<void> signUp() async {
     if (_formkey.currentState!.validate()) {
       // Print values for debugging
       print('Email: ${emailController.text}');
       print('Password: ${passwordController.text}');
       print('Username: ${usernameController.text}');
+      try {
+        final credential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text,
+            );
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(
-            email: emailController.text,
-            password: passwordController.text,
-            username: usernameController.text,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(
+              email: emailController.text,
+              password: passwordController.text,
+              username: usernameController.text,
+            ),
           ),
-        ),
-      );
+        );
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message ?? 'Failed to sign up')),
+        );
+      }
     } else {
-      // This will show if validation fails
       print('Validation failed');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
