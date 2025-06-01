@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text('Home')),
       body: Padding(
         padding: EdgeInsets.all(15),
-        child: Row(children: [Text(widget.username ?? '')]),
+        child: Row(children: [Text(widget.username ?? ''),]),
       ),
     );
   }
