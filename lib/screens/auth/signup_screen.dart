@@ -37,7 +37,7 @@ class _SignupScreenState extends State<SignupScreen> {
               password: passwordController.text,
             );
 
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => LoginScreen(

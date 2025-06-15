@@ -1,3 +1,4 @@
+import 'package:fittrack/screens/excercises/excercise_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,7 +18,18 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text('Home')),
       body: Padding(
         padding: EdgeInsets.all(15),
-        child: Row(children: [Text(widget.username ?? ''),]),
+        child: Row(
+          children: [
+            Text(widget.username ?? ''),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ExerciseListScreen()),
+              ),
+              child: Text("Explore Workouts"),
+            ),
+          ],
+        ),
       ),
     );
   }

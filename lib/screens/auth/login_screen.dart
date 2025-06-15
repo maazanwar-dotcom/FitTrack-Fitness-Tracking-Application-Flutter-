@@ -1,8 +1,7 @@
-import 'package:fittrack/screens/auth/onboarding_screen.dart';
 import 'package:fittrack/screens/home/home_screen.dart';
 import 'package:fittrack/widgets/custom_form_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   final String? email;
@@ -18,7 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
 
   @override
   void dispose() {
@@ -27,31 +25,32 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void login() {
+  Future<void> login() async {
     if (_formkey.currentState!.validate()) {
-      if (passwordController.text == widget.password &&
-          emailController.text == widget.email) {
-        Navigator.push(
+      try {
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text,
+            );
+        Navigator.pushReplacement<void, void>(
           context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(username: widget.username),
+          MaterialPageRoute<void>(
+            builder: (context) => HomeScreen(
+              username: credential.additionalUserInfo?.username ?? '',
+            ),
           ),
         );
-      } else {
-        print('Validation failed');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Email or Password Incorrect'),
-            backgroundColor: Colors.red,
-          ),
-        );
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.message ?? 'Login failed')));
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.username);
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
@@ -69,7 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
               label: 'Email',
               controller: emailController,
               validator: (value) {
-                print('Validating email: $value'); // Debug print
                 if (value == null || value.isEmpty) {
                   return "Email is required";
                 }
@@ -88,7 +86,6 @@ class _LoginScreenState extends State<LoginScreen> {
               obsecure: true,
               controller: passwordController,
               validator: (value) {
-                print('Validating password: $value'); // Debug print
                 if (value == null || value.isEmpty) {
                   return "Password is required";
                 }
@@ -104,16 +101,18 @@ class _LoginScreenState extends State<LoginScreen> {
             ElevatedButton(onPressed: login, child: Text('Login')),
             SizedBox(height: 10),
             Text(
-              '--------------------------------------------or------------------------------------------',
+              '-----------------------------or-----------------------------',
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                // TODO: Implement Google Sign-In if needed
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(FontAwesomeIcons.google, size: 30),
+                  Icon(Icons.account_circle, size: 30),
                   SizedBox(width: 20),
                   Text('Sign in with google'),
                 ],
