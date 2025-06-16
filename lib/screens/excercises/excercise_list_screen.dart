@@ -17,6 +17,8 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
   bool _hasMore = true;
   String? _error;
 
+  Exercise? _selectedExercise; // For selection and returning
+
   @override
   void initState() {
     super.initState();
@@ -110,7 +112,28 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
           IconButton(icon: Icon(Icons.refresh), onPressed: _refreshData),
         ],
       ),
-      body: _buildBody(),
+      body: Stack(
+        children: [
+          _buildBody(),
+          if (_selectedExercise != null)
+            Positioned(
+              bottom: 20,
+              left: 16,
+              right: 16,
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.check),
+                label: Text("Add Exercise"),
+                onPressed: () {
+                  Navigator.pop(context, _selectedExercise);
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size.fromHeight(48),
+                  backgroundColor: Colors.blue,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -191,11 +214,19 @@ class _ExerciseListScreenState extends State<ExerciseListScreen> {
   }
 
   Widget _buildExerciseCard(Exercise exercise) {
+    bool isSelected = _selectedExercise?.id == exercise.id;
     return Card(
       elevation: 4,
       margin: EdgeInsets.symmetric(vertical: 8),
+      color: isSelected ? Colors.blue[50] : null,
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          setState(() {
+            _selectedExercise = isSelected
+                ? null
+                : exercise; // toggle selection
+          });
+        },
         borderRadius: BorderRadius.circular(8),
         child: Padding(
           padding: EdgeInsets.all(12),

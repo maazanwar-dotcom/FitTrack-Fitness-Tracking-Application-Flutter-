@@ -1,8 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
-// Exercise model based on ExerciseDB API response
 class Exercise {
   final String id;
   final String name;
@@ -35,5 +30,18 @@ class Exercise {
       secondaryMuscles: List<String>.from(json['secondaryMuscles'] ?? []),
       instructions: List<String>.from(json['instructions'] ?? []),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'bodyPart': bodyPart,
+      'equipment': equipment,
+      'gifUrl': gifUrl,
+      'target': target,
+      'secondaryMuscles': secondaryMuscles,
+      'instructions': instructions,
+    };
   }
 }

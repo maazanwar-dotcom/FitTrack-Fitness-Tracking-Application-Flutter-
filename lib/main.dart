@@ -1,32 +1,48 @@
-import 'package:fittrack/screens/auth/onboarding_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'screens/workout_screen.dart';
+import 'screens/profile_screen.dart';
+import 'screens/auth/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(const FitTrackApp());
+  await Firebase.initializeApp();
+  runApp(FitTrackApp());
 }
 
 class FitTrackApp extends StatelessWidget {
-  const FitTrackApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'FitTrack',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        appBarTheme: AppBarTheme(
-          backgroundColor: const Color.fromARGB(255, 235, 234, 234),
-          foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-          elevation: 4,
-          centerTitle: true,
-        ),
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: const OnboardingScreen(),
+      home: AuthGate(),
+      routes: {'/workout': (_) => const WorkoutScreen()},
+    );
+  }
+}
+
+class AuthGate extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (snapshot.hasData) {
+          return const WorkoutScreen();
+        }
+        return const LoginScreen();
+      },
     );
   }
 }
