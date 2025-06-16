@@ -1,4 +1,4 @@
-import 'package:fittrack/screens/home/home_screen.dart';
+import 'package:fittrack/screens/home/WorkoutScreen.dart';
 import 'package:fittrack/widgets/custom_form_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
             );
         Navigator.pushReplacement<void, void>(
           context,
-          MaterialPageRoute<void>(builder: (context) => HomeScreen()),
+          MaterialPageRoute<void>(builder: (context) => WorkoutScreen()),
         );
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(
