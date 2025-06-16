@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fittrack/screens/create_routine.dart';
 import 'package:fittrack/screens/profile_screen.dart';
 import 'package:fittrack/models/RoutineModel.dart';
+// Import your log workout screen here (make sure the path is correct)
+import 'package:fittrack/screens/log_workout_screen.dart';
 
 class WorkoutScreen extends StatefulWidget {
   const WorkoutScreen({Key? key}) : super(key: key);
@@ -304,8 +306,24 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                     ),
-                                    onPressed: () {
-                                      // TODO: Start this routine (show detail or begin workout)
+                                    onPressed: () async {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => LogWorkoutScreen(
+                                            routine: routine,
+                                          ),
+                                        ),
+                                      );
+                                      if (result == true) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Workout logged!'),
+                                          ),
+                                        );
+                                      }
                                     },
                                     child: const Text("Start Routine"),
                                   ),
