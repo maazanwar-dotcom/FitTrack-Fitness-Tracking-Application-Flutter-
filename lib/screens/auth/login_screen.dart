@@ -35,11 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
             );
         Navigator.pushReplacement<void, void>(
           context,
-          MaterialPageRoute<void>(
-            builder: (context) => HomeScreen(
-              username: credential.additionalUserInfo?.username ?? '',
-            ),
-          ),
+          MaterialPageRoute<void>(builder: (context) => HomeScreen()),
         );
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(
