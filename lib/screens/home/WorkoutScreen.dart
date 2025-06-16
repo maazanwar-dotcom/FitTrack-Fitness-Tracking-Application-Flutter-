@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fittrack/screens/create_routine.dart';
 import 'package:fittrack/screens/profile_screen.dart';
 import 'package:fittrack/models/RoutineModel.dart';
-// Import your log workout screen here (make sure the path is correct)
 import 'package:fittrack/screens/log_workout_screen.dart';
+import 'package:fittrack/screens/workout_history_screen.dart';
 
 class WorkoutScreen extends StatefulWidget {
   const WorkoutScreen({Key? key}) : super(key: key);
@@ -215,8 +215,8 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: OutlinedButton.icon(
-                      icon: const Icon(Icons.search),
-                      label: const Text("Explore"),
+                      icon: const Icon(Icons.history),
+                      label: const Text("History"),
                       style: OutlinedButton.styleFrom(
                         backgroundColor: Colors.grey[100],
                         foregroundColor: Colors.black,
@@ -224,7 +224,12 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       onPressed: () {
-                        // TODO: Implement Explore action
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => WorkoutHistoryScreen(),
+                          ),
+                        );
                       },
                     ),
                   ),
