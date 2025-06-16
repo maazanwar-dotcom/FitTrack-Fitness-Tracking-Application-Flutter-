@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fittrack/screens/auth/onboarding_screen.dart';
 import 'package:fittrack/screens/create_routine.dart';
 import 'package:flutter/material.dart';
-import 'screens/workout_screen.dart';
+import 'screens/home/WorkoutScreen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/auth/login_screen.dart';
 
@@ -42,7 +43,7 @@ class AuthGate extends StatelessWidget {
         if (snapshot.hasData) {
           return const WorkoutScreen();
         }
-        return const LoginScreen();
+        return const OnboardingScreen();
       },
     );
   }

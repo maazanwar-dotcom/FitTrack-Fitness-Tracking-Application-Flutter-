@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fittrack/services/RoutineFirestoreService.dart';
 import 'package:fittrack/widgets/botton_nav_bar.dart';
-import 'workout_screen.dart';
+import 'package:fittrack/screens/home/WorkoutScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
